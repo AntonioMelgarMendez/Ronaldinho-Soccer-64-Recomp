@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000140,0x00000140,osContSetCh,contsetch,0x70,0388661c38fe07f46156055ecf91c8d6,[],[],[]

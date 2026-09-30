@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000190,0x00000190,__osPfsGetStatus,pfsgetstatus,0xE4,20f21b2dcdbb3208aa6f2aa1c4570639,[],[],[]
+0x000274,0x00000274,__osPfsRequestOneChannel,pfsgetstatus,0xC0,01511dfe35aeb40c80eb8659bb179af8,[],[],[]
+0x000334,0x00000334,__osPfsGetOneChannelData,pfsgetstatus,0x9C,f2b7aed648a30976d48147ff0bef93dd,[],[],[]

@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,osDpGetCounters,dpctr,0x50,5d168891f4d20587be7334aaf9d1cab4,[],[],[]

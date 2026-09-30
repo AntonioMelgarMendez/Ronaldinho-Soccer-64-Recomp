@@ -1,0 +1,3 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000170,0x00000170,func_00000170,pfsreadwritefile,0xFC,5afadf46631b3fe6106e37c178e5f3b7,[],[],[]
+0x00026C,0x0000026C,osPfsReadWriteFile,pfsreadwritefile,0x424,18852db61af9586b56acf7de7b582fcf,[],[],[]

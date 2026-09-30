@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000180,0x00000180,osDriveRomInit,driverominit,0xE0,7c1be98fb8260f71933d5c03a9e2d3fc,[],[],[]

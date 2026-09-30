@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,osMapTLBRdb,maptlbrdb,0x60,a1545b9b3669526aed5ab45a6fa3c650,[],[],[]

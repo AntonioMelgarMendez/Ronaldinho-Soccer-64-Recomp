@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000130,0x00000130,__osSetHWIntrRoutine,sethwinterrupt,0x50,eb446ed1d9ec071cff8dedb8c450361c,[],[],[]

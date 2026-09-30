@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000E0,0x000000E0,osAiSetFrequency,aisetfreq,0x160,d4fd1395f665f17dc4bdb3a379fa0c6f,[],[],[]

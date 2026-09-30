@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,osUnmapTLB,unmaptlb,0x40,52faae5437c678d95c36d1252b6d0f58,[],[],[]

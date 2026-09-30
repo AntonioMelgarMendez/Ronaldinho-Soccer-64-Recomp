@@ -1,0 +1,68 @@
+diff --git a/librecomp/src/pi.cpp b/librecomp/src/pi.cpp
+index 43509ba..df19b07 100644
+--- a/librecomp/src/pi.cpp
++++ b/librecomp/src/pi.cpp
+@@ -3,11 +3,14 @@
+ #include <array>
+ #include <cstring>
+ #include <string>
++#include <cstdio>
++#include <cstdlib>
+ #include <mutex>
+ #include "recomp.h"
+ #include "librecomp/addresses.hpp"
+ #include "librecomp/game.hpp"
+ #include "librecomp/files.hpp"
++#include "librecomp/overlays.hpp"
+ #include <ultramodern/ultra64.h>
+ #include <ultramodern/ultramodern.hpp>
+ 
+@@ -67,11 +70,24 @@ void recomp::do_rom_read(uint8_t* rdram, gpr ram_address, uint32_t physical_addr
+     // TODO handle misaligned DMA
+     assert((physical_addr & 0x1) == 0 && "Only PI DMA from aligned ROM addresses is currently supported");
+     assert((ram_address & 0x7) == 0 && "Only PI DMA to aligned RDRAM addresses is currently supported");
++    static const bool trace_dma = std::getenv("ISS64_TRACE_DMA") != nullptr;
++    if (trace_dma && (uint32_t)ram_address >= 0x80100000) {
++        std::fprintf(stderr, "[iss64 overlay DMA] rom=0x%08X ram=0x%08X size=0x%zX\n",
++            physical_addr - recomp::rom_base, (uint32_t)ram_address, num_bytes);
++    }
+     uint8_t* rom_addr = rom.data() + physical_addr - recomp::rom_base;
+     for (size_t i = 0; i < num_bytes; i++) {
+         MEM_B(i, ram_address) = *rom_addr;
+         rom_addr++;
+     }
++
++    // The stock runtime only registers the initial executable image. ISS64
++    // streams several code overlays through PI DMA and then calls them through
++    // function pointers, so publish any recompiled sections covered by this
++    // transfer at their actual destination address.
++    load_overlays(physical_addr - recomp::rom_base,
++                  static_cast<int32_t>(ram_address),
++                  static_cast<uint32_t>(num_bytes));
+ }
+ 
+ void recomp::do_rom_pio(uint8_t* rdram, gpr ram_address, uint32_t physical_addr) {
+diff --git a/librecomp/src/recomp.cpp b/librecomp/src/recomp.cpp
+index 850689d..04f22e2 100644
+--- a/librecomp/src/recomp.cpp
++++ b/librecomp/src/recomp.cpp
+@@ -416,6 +416,10 @@ extern "C" void osGetMemSize_recomp(uint8_t * rdram, recomp_context * ctx) {
+ 
+ enum class StatusReg {
+     FR = 0x04000000,
++    // Games commonly enable COP1 directly during boot. No host-side action is
++    // required because floating-point operations are already native, but the
++    // bit must still be preserved in the emulated status register.
++    CU1 = 0x20000000,
+ };
+ 
+ extern "C" void cop0_status_write(recomp_context* ctx, gpr value) {
+@@ -442,6 +446,8 @@ extern "C" void cop0_status_write(recomp_context* ctx, gpr value) {
+         changed &= ~(uint32_t)StatusReg::FR;
+     }
+ 
++    changed &= ~(uint32_t)StatusReg::CU1;
++
+     // If any other bits were changed, assert false as they're not handled currently
+     if (changed) {
+         printf("Unhandled status register bits changed: 0x%08X\n", changed);

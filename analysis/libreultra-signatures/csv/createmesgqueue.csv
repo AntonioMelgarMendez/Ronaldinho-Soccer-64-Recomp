@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000F0,0x000000F0,osCreateMesgQueue,createmesgqueue,0x30,3609a447b3a9cb3abb6bf3d697f44e8b,[],[],[]

@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,osEPiGetDeviceType,epigettype,0x20,9b2b3b7aa0236ac9415232036c4302cf,[],[],[]

@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000190,0x00000190,func_00000190,parameters,0x60,aceb486e7e4b2d2f1c5f2328b503502b,[],[],[]

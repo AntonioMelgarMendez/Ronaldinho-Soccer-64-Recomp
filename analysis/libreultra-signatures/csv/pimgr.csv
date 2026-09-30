@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000380,0x00000380,osCreatePiManager,pimgr,0x190,f8f382375c54a67cb613310df468af30,[],[],[]

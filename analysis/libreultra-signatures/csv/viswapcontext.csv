@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000120,0x00000120,__osViSwapContext,viswapcontext,0x360,2bbd9afe51fc2f02372874b91cd660c7,[],[],[]

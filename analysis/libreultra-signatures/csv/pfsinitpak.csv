@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001E0,0x000001E0,osPfsInitPak,pfsinitpak,0x2A0,090b067fc461a2edb91fb81505217edd,[],[],[]

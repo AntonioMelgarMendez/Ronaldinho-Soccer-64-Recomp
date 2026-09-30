@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001B0,0x000001B0,osPfsChecker,pfschecker,0x6C4,36492e7e12fd640677fe4bcf7d7cae83,[],[],[]
+0x000874,0x00000874,corrupted_init,pfschecker,0x1B4,96c859242f4ff1d5e621fe6dad25c9e8,[],[],[]
+0x000A28,0x00000A28,corrupted,pfschecker,0x1E8,d29eac5e01342956ec3eea27bb246104,[],[],[]

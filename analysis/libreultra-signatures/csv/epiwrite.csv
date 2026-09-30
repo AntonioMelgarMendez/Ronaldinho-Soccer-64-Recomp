@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000120,0x00000120,osEPiWriteIo,epiwrite,0x50,483954df565bde203bb11e94e12d3ccf,[],[],[]

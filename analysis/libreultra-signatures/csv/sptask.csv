@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001E0,0x000001E0,func_000001E0,sptask,0x11C,41d0b0e753f6ae9debc463303a31b205,[],[],[]
+0x0002FC,0x000002FC,osSpTaskLoad,sptask,0x190,4c5479fffcb71ab9cc4532016502d378,[],[],[]
+0x00048C,0x0000048C,osSpTaskStartGo,sptask,0x44,ca28d1804b66d4ecb49c303debb31be0,[],[],[]

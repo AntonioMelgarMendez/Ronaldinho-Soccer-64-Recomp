@@ -1,0 +1,12 @@
+{
+  "title": "RONALDINHO SOCCER",
+  "sha1": "93119cee958ad7a7b28f6a945cfaa7829fe340da",
+  "rom_size": 8388608,
+  "entries": [
+    "0x80000400"
+  ],
+  "translated_instructions": 4516,
+  "profile_instructions": 3645,
+  "lowest_pc": "0x80000180",
+  "highest_pc": "0x800902A8"
+}

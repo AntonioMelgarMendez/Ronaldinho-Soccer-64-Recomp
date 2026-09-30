@@ -1,0 +1,3 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001F0,0x000001F0,osContStartQuery,contquery,0x84,88cc9f456596f72274da232306ba30ba,[],[],[]
+0x000274,0x00000274,osContGetQuery,contquery,0x2C,51af64b9cfe7c042624d538c6935ed54,[],[],[]

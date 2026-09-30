@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000110,0x00000110,osWritebackDCache,writebackdcache,0x80,76328f6df072320e210fd426361e20f8,[],[],[]

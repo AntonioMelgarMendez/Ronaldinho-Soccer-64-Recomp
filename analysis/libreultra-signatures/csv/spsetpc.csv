@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,__osSpSetPc,spsetpc,0x40,d734ab46d73bb7b08d8f6545bf50e6c1,[],[],[]

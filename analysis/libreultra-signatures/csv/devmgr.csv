@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001E0,0x000001E0,__osDevMgrMain,devmgr,0x490,8dc8986377d9b9af258804f32186e780,[],[],[]

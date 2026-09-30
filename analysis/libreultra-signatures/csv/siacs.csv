@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000200,0x00000200,__osSiCreateAccessQueue,siacs,0x50,e0907aeff542aaebba1f0a9cb6698785,[],[],[]
+0x000250,0x00000250,__osSiGetAccess,siacs,0x44,14ad33a7bb200a06136e77d5f7752145,[],[],[]
+0x000294,0x00000294,__osSiRelAccess,siacs,0x2C,5394d494a687871b0ca606024242f0e1,[],[],[]

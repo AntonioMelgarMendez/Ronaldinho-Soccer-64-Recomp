@@ -1,0 +1,5 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000350,0x00000350,osMotorStop,motor,0x1A0,22bdc154ab083ee5b2425653c0ca8adb,[],[],[]
+0x0004F0,0x000004F0,osMotorStart,motor,0x1A0,22bdc154ab083ee5b2425653c0ca8adb,[],[],[]
+0x000690,0x00000690,func_00000690,motor,0x17C,eac5bb290895d7f8520966c1d65dc4bc,[],[],[]
+0x00080C,0x0000080C,osMotorInit,motor,0x2E4,ed8a0f5665330b32fc16f1b05540b3ac,[],[],[]

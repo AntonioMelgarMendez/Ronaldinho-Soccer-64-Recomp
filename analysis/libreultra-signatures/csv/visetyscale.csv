@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000120,0x00000120,osViSetYScale,visetyscale,0x60,d09c0e9a5b8490b8eae81388f09f7f73,[],[],[]

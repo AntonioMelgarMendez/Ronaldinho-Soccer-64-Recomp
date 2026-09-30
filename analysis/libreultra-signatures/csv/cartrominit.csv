@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000190,0x00000190,osCartRomInit,cartrominit,0x100,dcace94c96f90b1a1a5716057077ef81,[],[],[]

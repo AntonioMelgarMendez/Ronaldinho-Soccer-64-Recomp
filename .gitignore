@@ -1,0 +1,21 @@
+# Local ROMs and cartridge-derived analysis artifacts are never distributed.
+*.n64
+*.v64
+*.z64
+*.rom
+/analysis/spimdisasm/
+
+# Build and runtime state.
+/build*/
+/.iss64/
+/.venv/
+/core
+/core.*
+
+# Tool/editor caches.
+__pycache__/
+*.py[cod]
+.cache/
+.idea/
+.vscode/
+.DS_Store

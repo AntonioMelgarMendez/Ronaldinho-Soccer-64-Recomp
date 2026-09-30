@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001C0,0x000001C0,osEepromWrite,conteepwrite,0x1EC,01b8333e76eae11efa66c0f4df6ae58a,[func_000001EC],[],[]
+0x0003AC,0x000003AC,func_000003AC,conteepwrite,0x10C,81546bda1bad91f13a35446167b1ca1a,[],[],[]
+0x0004B8,0x000004B8,__osEepStatus,conteepwrite,0x228,4b90b77e950398e35f38fc52fffc9647,[],[],[]

@@ -1,0 +1,12 @@
+[submodule "third_party/N64ModernRuntime"]
+	path = third_party/N64ModernRuntime
+	url = https://github.com/N64Recomp/N64ModernRuntime.git
+[submodule "third_party/rt64"]
+	path = third_party/rt64
+	url = https://github.com/rt64/rt64.git
+[submodule "third_party/libreultra"]
+	path = third_party/libreultra
+	url = https://github.com/n64decomp/libreultra.git
+[submodule "third_party/mupen64plus-rsp-hle"]
+	path = third_party/mupen64plus-rsp-hle
+	url = https://github.com/mupen64plus/mupen64plus-rsp-hle.git

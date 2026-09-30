@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,osPhysicalToVirtual,physicaltovirtual,0x10,b6285d3b9d5f4634bdb2068db588bdf6,[],[],[]

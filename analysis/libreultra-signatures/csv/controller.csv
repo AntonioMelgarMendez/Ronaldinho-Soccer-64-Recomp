@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000300,0x00000300,osContInit,controller,0x170,34a5dee76c9e767e4f4594bb893f94af,[],[],[]
+0x000470,0x00000470,__osContGetInitData,controller,0xD0,cac0ce258655d9e7447b5721e98767b9,[],[],[]
+0x000540,0x00000540,__osPackRequestData,controller,0x100,8ecf4a7b96618afae37b0b050b37f2c4,[],[],[]

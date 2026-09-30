@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000120,0x00000120,osPfsSetLabel,pfssetlabel,0x100,01fd86cc6e969923848485a29c83ba82,[],[],[]

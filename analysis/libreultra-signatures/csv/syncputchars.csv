@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001B0,0x000001B0,__osSyncPutChars,syncputchars,0x130,0872a71e1c7770c51902eba10466a93d,[],[],[]

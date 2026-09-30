@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000150,0x00000150,__osSiRawStartDma,sirawdma,0xB0,4dc013395338aa8c73d2884505b32ba9,[],[],[]

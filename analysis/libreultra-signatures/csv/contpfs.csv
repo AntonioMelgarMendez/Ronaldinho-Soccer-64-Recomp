@@ -1,0 +1,9 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001F0,0x000001F0,__osSumcalc,contpfs,0x5C,85789f1e241ab58b535ef2c0f1e6887c,[],[],[]
+0x00024C,0x0000024C,__osIdCheckSum,contpfs,0x68,fc3892332dbb48589583a776632fab65,[],[],[]
+0x0002B4,0x000002B4,__osRepairPackId,contpfs,0x418,843f5e7e327732260ca972e5810a73b9,[],[],[]
+0x0006CC,0x000006CC,__osCheckPackId,contpfs,0x198,51b9b945cdbd8aa94fb0f96eec083dbc,[],[],[]
+0x000864,0x00000864,__osGetId,contpfs,0x25C,12dea91c4ceaec4418abbff39c40f86b,[],[],[]
+0x000AC0,0x00000AC0,__osCheckId,contpfs,0xFC,98e0bd84f562dfed565abc962dee6e74,[],[],[]
+0x000BBC,0x00000BBC,__osPfsRWInode,contpfs,0x320,d47bcc027ce335ed519e77beea051e32,[],[],[]
+0x000EDC,0x00000EDC,__osPfsSelectBank,contpfs,0x74,51b34a768d9e030c8c5b027ceee3bd43,[],[],[]

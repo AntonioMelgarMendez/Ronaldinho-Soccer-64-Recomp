@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,__osGetFpcCsr,getfpccsr,0x10,db56e44aaf7941f12cfe2891129d03b9,[],[],[]

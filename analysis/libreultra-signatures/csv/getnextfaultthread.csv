@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000130,0x00000130,__osGetNextFaultedThread,getnextfaultthread,0xB0,f0b219ab71b29d16a552b799b1f11e59,[],[],[]

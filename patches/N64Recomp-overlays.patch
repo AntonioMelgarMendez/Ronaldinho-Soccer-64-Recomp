@@ -1,0 +1,22 @@
+diff --git a/src/recompilation.cpp b/src/recompilation.cpp
+index c228433..bd14b93 100644
+--- a/src/recompilation.cpp
++++ b/src/recompilation.cpp
+@@ -305,8 +305,15 @@ bool process_instruction(GeneratorType& generator, const N64Recomp::Context& con
+ 
+                 switch (jal_result) {
+                     case JalResolutionResult::NoMatch:
+-                        fmt::print(stderr, "No function found for jal target: 0x{:08X}\n", target_func_vram);
+-                        return false;
++                        // A symbols-only recompilation may intentionally contain only
++                        // the resident executable while overlays are discovered later.
++                        // Keep those cross-image calls dynamic instead of rejecting the
++                        // whole resident function. The runtime will resolve the target
++                        // after the corresponding overlay has been registered.
++                        fmt::print(stderr, "[Info] Unresolved jal target 0x{:08X} in {}, falling back to function lookup\n",
++                            target_func_vram, func.name);
++                        call_by_lookup = true;
++                        break;
+                     case JalResolutionResult::Match:
+                         jal_target_name = context.functions[matched_func_index].name;
+                         break;

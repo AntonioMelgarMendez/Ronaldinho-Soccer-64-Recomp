@@ -1,0 +1,3 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000210,0x00000210,__osContRamRead,contramread,0x21C,77453b11f7db285028d0bdc9b3f92684,[func_0000021C],[],[]
+0x00042C,0x0000042C,func_0000042C,contramread,0x144,4a803fcce7123389148192013588a79b,[],[],[]

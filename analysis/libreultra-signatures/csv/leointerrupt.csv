@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000230,0x00000230,__osLeoInterrupt,leointerrupt,0x6A4,fd16b998588ab958364a48a5ff29a189,[func_000006A4;func_000006A4;func_000006A4;func_0000078C;func_000006A4;func_000006A4;func_000006A4;func_000006A4;func_000006A4;func_0000078C;func_000006A4;func_0000078C;func_0000078C],[],[]
+0x0008D4,0x000008D4,func_000008D4,leointerrupt,0xE8,9900486904a52f5f1125956766454566,[func_0000078C],[],[]
+0x0009BC,0x000009BC,func_000009BC,leointerrupt,0xF4,8978879a4d307f4ed1b5af450d81bfb4,[],[],[]

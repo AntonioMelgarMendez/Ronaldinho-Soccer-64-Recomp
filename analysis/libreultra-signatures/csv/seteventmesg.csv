@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000150,0x00000150,osSetEventMesg,seteventmesg,0x70,45582c087b7578d997280b8c3f22ea09,[],[],[]

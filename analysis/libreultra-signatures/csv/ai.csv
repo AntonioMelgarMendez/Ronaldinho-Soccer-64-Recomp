@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,__osAiDeviceBusy,ai,0x30,1b42fb2538c369a3d1f241eb0bed891c,[],[],[]

@@ -1,0 +1,10 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0007A0,0x000007A0,__osExceptionPreamble,exceptasm,0x10,7793b18b011c30124cc9bc2bfc0c51e6,[],[],[]
+0x0007B0,0x000007B0,__osException,exceptasm,0x534,73f5b71627dffd13ba8803c5080c0fa1,[],[],[]
+0x000CE4,0x00000CE4,send_mesg,exceptasm,0xB4,267159d0216a25806c56a76e40314603,[],[],[]
+0x000D98,0x00000D98,handle_CpU,exceptasm,0x34,af00142b375e62b126f9b47044786000,[],[],[]
+0x000DCC,0x00000DCC,__osEnqueueAndYield,exceptasm,0x100,b2ab550f475a0283a10bee8ee7769123,[],[],[]
+0x000ECC,0x00000ECC,__osEnqueueThread,exceptasm,0x48,b6fea7a09c367e9143563320aa68a316,[],[],[]
+0x000F14,0x00000F14,__osPopThread,exceptasm,0x10,0fba14b97da404684755e37f4f5b7eef,[],[],[]
+0x000F24,0x00000F24,__osDispatchThread,exceptasm,0x17C,79464850edfb1da642be18687bcebcdf,[],[],[]
+0x0010A0,0x000010A0,__osCleanupThread,exceptasm,0x10,7e06943b5d093b028d18ee7401e3075a,[],[],[]

@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x000190,0x00000190,osLeoDiskInit,leodiskinit,0x100,33d4cbc8a7361dd2d6a61f074347b0bc,[],[],[]

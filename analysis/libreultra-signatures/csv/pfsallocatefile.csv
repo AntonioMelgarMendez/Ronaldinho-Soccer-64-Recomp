@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001C0,0x000001C0,osPfsAllocateFile,pfsallocatefile,0x484,aaf6898a62f956d72207ea72d60f778a,[],[],[]
+0x000644,0x00000644,__osPfsDeclearPage,pfsallocatefile,0x264,e6b9ca5502cfc9288fd7204e6a558789,[func_000006E8;func_000006E8],[],[]
+0x0008A8,0x000008A8,func_000008A8,pfsallocatefile,0xC8,793e317e9a5a601e0c627673fe91a9de,[],[],[]

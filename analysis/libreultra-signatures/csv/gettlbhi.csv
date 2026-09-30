@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,__osGetTLBHi,gettlbhi,0x30,2453492a890280f97b2df25f0d63fbef,[],[],[]

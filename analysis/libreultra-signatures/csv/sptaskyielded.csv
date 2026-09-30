@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000E0,0x000000E0,osSpTaskYielded,sptaskyielded,0x80,728339e47a11efc06c607bc09c5104a9,[],[],[]

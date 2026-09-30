@@ -1,0 +1,4 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0001F0,0x000001F0,osContStartReadData,contreaddata,0x8C,dcc3d427cbe49547fd139b53fd3920bb,[],[],[]
+0x00027C,0x0000027C,osContGetReadData,contreaddata,0xA8,d07d1661bc939e35713aa1d82aece67c,[],[],[]
+0x000324,0x00000324,func_00000324,contreaddata,0xEC,0a424319fb549f888b487fda7e5d52b1,[],[],[]

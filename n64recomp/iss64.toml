@@ -1,0 +1,24 @@
+[input]
+entrypoint = 0x80000400
+symbols_file_path = "iss64_symbols.toml"
+rom_file_path = "../Ronaldinho's Soccer 64 (Brazil) (Pirate).z64"
+output_func_path = "generated"
+recomp_include = "#include \"iss64_recomp.h\""
+functions_per_output_file = 64
+uses_mips3_float_mode = true
+
+[patches]
+stubs = [
+    "func_80088060", # low-level exception handler replaced by ultramodern
+    "func_800885A4", # exception-handler local entry branches back into the handler body
+    "func_800887E4", # low-level context restore/dispatch
+    "func_8008B300", # osMapTLBRdb; not needed by the desktop runtime bring-up
+]
+ignored = []
+renamed = []
+instruction = [
+    { func = "func_80081980", vram = 0x800819B8, value = 0x00000000 },
+    { func = "func_80081980", vram = 0x800819DC, value = 0x00000000 },
+    { func = "func_800840E0", vram = 0x80084118, value = 0x00000000 },
+    { func = "func_800840E0", vram = 0x8008413C, value = 0x00000000 },
+]

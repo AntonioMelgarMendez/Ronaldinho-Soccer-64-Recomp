@@ -1,0 +1,2 @@
+vrom,address,name,file,length,hash of top bits of words,functions called by this function,non-jal function calls,referenced functions
+0x0000C0,0x000000C0,__osGetCompare,getcompare,0x10,54dd6d4622c790035393e9f780d12fc9,[],[],[]
