@@ -2444,7 +2444,7 @@ static FuncEntry section_0_main_funcs[] = {
     { .func = osSpTaskLoad_recomp, .offset = 0x0008451C, .rom_size = 0x00000000 },
     { .func = osSpTaskStartGo_recomp, .offset = 0x000846AC, .rom_size = 0x00000000 },
     { .func = osDpSetNextBuffer_recomp, .offset = 0x000846F0, .rom_size = 0x00000000 },
-    { .func = func_80084BA0, .offset = 0x000847A0, .rom_size = 0x00000020 },
+    { .func = osSpTaskYield_recomp, .offset = 0x000847A0, .rom_size = 0x00000000 },
     { .func = osGetCount_recomp, .offset = 0x000847C0, .rom_size = 0x00000000 },
     { .func = osContStartQuery_recomp, .offset = 0x000847D0, .rom_size = 0x00000000 },
     { .func = osContGetQuery_recomp, .offset = 0x00084854, .rom_size = 0x00000000 },

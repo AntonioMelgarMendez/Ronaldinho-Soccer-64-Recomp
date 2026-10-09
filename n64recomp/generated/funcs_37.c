@@ -6778,32 +6778,6 @@ L_80084908:
     // 0x80084918: nop
 
 ;}
-RECOMP_FUNC void func_80084BA0(uint8_t* rdram, recomp_context* ctx) {
-    uint64_t hi = 0, lo = 0, result = 0;
-    int c1cs = 0;
-    // 0x80084BA0: addiu       $sp, $sp, -0x18
-    ctx->r29 = ADD32(ctx->r29, -0X18);
-    // 0x80084BA4: sw          $ra, 0x14($sp)
-    MEM_W(0X14, ctx->r29) = ctx->r31;
-    // 0x80084BA8: jal         0x8008C860
-    // 0x80084BAC: addiu       $a0, $zero, 0x400
-    ctx->r4 = ADD32(0, 0X400);
-    func_8008C860(rdram, ctx);
-        goto after_0;
-    // 0x80084BAC: addiu       $a0, $zero, 0x400
-    ctx->r4 = ADD32(0, 0X400);
-    after_0:
-    // 0x80084BB0: lw          $ra, 0x14($sp)
-    ctx->r31 = MEM_W(ctx->r29, 0X14);
-    // 0x80084BB4: addiu       $sp, $sp, 0x18
-    ctx->r29 = ADD32(ctx->r29, 0X18);
-    // 0x80084BB8: jr          $ra
-    // 0x80084BBC: nop
-
-    return;
-    // 0x80084BBC: nop
-
-;}
 RECOMP_FUNC void func_80084EF0(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     int c1cs = 0;
@@ -9846,4 +9820,18 @@ L_800887C0:
     return;
     // 0x800887D0: sw          $a0, 0x8($a1)
     MEM_W(0X8, ctx->r5) = ctx->r4;
+;}
+RECOMP_FUNC void func_800887D4(uint8_t* rdram, recomp_context* ctx) {
+    uint64_t hi = 0, lo = 0, result = 0;
+    int c1cs = 0;
+    // 0x800887D4: lw          $v0, 0x0($a0)
+    ctx->r2 = MEM_W(ctx->r4, 0X0);
+    // 0x800887D8: lw          $t9, 0x0($v0)
+    ctx->r25 = MEM_W(ctx->r2, 0X0);
+    // 0x800887DC: jr          $ra
+    // 0x800887E0: sw          $t9, 0x0($a0)
+    MEM_W(0X0, ctx->r4) = ctx->r25;
+    return;
+    // 0x800887E0: sw          $t9, 0x0($a0)
+    MEM_W(0X0, ctx->r4) = ctx->r25;
 ;}

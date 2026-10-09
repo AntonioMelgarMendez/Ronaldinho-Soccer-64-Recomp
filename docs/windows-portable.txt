@@ -1,0 +1,65 @@
+RONALDINHO SOCCER 64 - WINDOWS x64 (EXPERIMENTAL)
+================================================
+
+COMO JUGAR
+1. Copia RonaldinhoSoccer64-Windows-x64.zip a tu computadora Windows.
+2. Extrae TODO el ZIP en una carpeta con permisos de escritura, por ejemplo
+   Documentos\RonaldinhoSoccer64. No lo ejecutes dentro del ZIP ni en Archivos
+   de programa. El EXE necesita todas las DLL que vienen a su lado.
+3. Copia tu ROM legal a esa carpeta y nombrala game.z64.
+   Tambien se reconoce: Ronaldinho's Soccer 64 (Brazil) (Pirate).z64
+4. Abre RonaldinhoSoccer64.exe con doble clic.
+   Alternativa: arrastra tu ROM sobre el EXE, o ejecuta:
+   RonaldinhoSoccer64.exe --rom "C:\Juegos\mi ROM.z64"
+
+REQUISITOS
+- Windows 10/11 de 64 bits (x64) y una GPU/controlador compatible con RT64
+  (Direct3D 12 o Vulkan). No es una version para Windows de 32 bits.
+- No necesitas Python, CMake, Visual Studio ni instalar el proyecto.
+- La ROM no esta incluida. Esta compilacion corresponde unicamente a la ROM
+  RONALDINHO SOCCER, NJPE revision 0, de 8 MiB, con SHA-1:
+  93119cee958ad7a7b28f6a945cfaa7829fe340da
+
+CONTROLES
+X = A, C = B, Z = Z, Enter = Start
+Flechas = palanca analogica, WASD = cruceta, IJKL = botones C
+Q / E = L / R
+F5 = ajustes (flechas para cambiar; Enter para reasignar; F5 para guardar)
+Tambien admite mandos USB reconocidos por SDL2.
+
+PARTIDAS Y AJUSTES
+Se guardan en .iss64 dentro de la carpeta del ejecutable. Conserva esa carpeta
+al actualizar o al trasladar tus partidas a otro equipo. El paquete no incluye
+las partidas ni la configuracion personal de la computadora de desarrollo.
+
+SI NO ABRE
+- Esta version guarda diagnostico.log y crash.txt junto al EXE (el segundo
+  puede quedar vacio si no hubo una excepcion capturable). Guarda la ejecucion
+  anterior como diagnostico-anterior.log y crash-anterior.txt.
+- Para una ventana negra en laptops Intel, cierra el juego y ejecuta primero
+  Probar_Compatibilidad.bat. Usa resolucion interna original, 4:3, sin MSAA/HDR,
+  sin cambiar tus ajustes guardados. No elimina los requisitos de GPU de RT64.
+- Si falla, prueba Probar_Vulkan.bat. Probar_D3D12.bat permite comparar APIs;
+  RT64 puede cambiar automaticamente de API por sus correcciones de drivers.
+  Probar_SinAudio.bat aisla el dispositivo de sonido y el procesamiento RSP de audio.
+  Ejecuta UNA prueba a la vez. Cada BAT conserva su propio .log y -crash.txt.
+- Envia los .log de las pruebas, los -crash.txt que no esten vacios y BUILD-INFO.txt.
+  No hace falta enviar la ROM ni tus partidas. Estos registros son locales;
+  no se suben automaticamente. Puedes borrarlos despues de revisarlos.
+- Una laptop sin GPU dedicada normalmente usa graficos Intel integrados. Algunos
+  modelos antiguos no tienen soporte suficiente para D3D12/Vulkan; reducir la
+  resolucion no agrega las funciones que falten. El log incluye modelo y driver.
+- Comprueba que extrajiste el EXE y TODAS las DLL en la misma carpeta.
+- Comprueba la ROM y actualiza el controlador de tu GPU.
+- El ejecutable no tiene firma digital comercial; Windows puede advertir sobre
+  un editor desconocido. No desactives tu antivirus.
+- Si aparece un error, conserva el mensaje exacto para diagnosticarlo.
+
+ESTADO Y CREDITOS
+Es el frontend experimental N64Recomp + N64ModernRuntime + RT64 de este
+proyecto, con audio RSP-HLE de Mupen64Plus y SDL2. No es un emulador externo.
+Puede conservar errores del proyecto original durante los partidos.
+Las licencias de dependencias estan en licenses/. El RSP-HLE es GPL-2.0-o-posterior.
+Este paquete es para el traslado local solicitado; no incluye la ROM.
+Codigo y scripts de compilacion: el proyecto que acompana a esta compilacion.
+Repositorio base: https://github.com/AntonioMelgarMendez/Ronaldinho-Soccer-64-Recomp

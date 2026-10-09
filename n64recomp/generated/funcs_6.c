@@ -5804,7 +5804,7 @@ RECOMP_FUNC void func_8001C38C(uint8_t* rdram, recomp_context* ctx) {
     // 0x8001C3B8: jal         0x80084BA0
     // 0x8001C3BC: sw          $t8, 0x4($v0)
     MEM_W(0X4, ctx->r2) = ctx->r24;
-    func_80084BA0(rdram, ctx);
+    osSpTaskYield_recomp(rdram, ctx);
         goto after_0;
     // 0x8001C3BC: sw          $t8, 0x4($v0)
     MEM_W(0X4, ctx->r2) = ctx->r24;

@@ -7,10 +7,27 @@
 
 # Build and runtime state.
 /build*/
+/dist/
 /.iss64/
 /.venv/
 /core
 /core.*
+*.log
+*.dmp
+/crash*.txt
+/Probar_*-crash.txt
+/diagnostico*.txt
+*.exe
+*.dll
+*.pdb
+*.zip
+
+# Local credentials and machine-specific configuration.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
 
 # Tool/editor caches.
 __pycache__/

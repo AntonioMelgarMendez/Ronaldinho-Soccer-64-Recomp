@@ -1,0 +1,98 @@
+COMPILACION PARA WINDOWS x64
+===========================
+
+El paquete listo para copiar se genera en:
+  dist/RonaldinhoSoccer64-Windows-x64.zip
+El ejecutable jugable es RonaldinhoSoccer64.exe (target iss64_official),
+NO iss64_recomp, que solo es el diagnostico de CPU sin interfaz grafica.
+
+DESDE LINUX
+1. Inicializa las dependencias: ./tools/setup_dependencies.sh
+2. Necesitas CMake >= 3.24, Ninja, un compilador C++ Linux, clang-cl, lld-link,
+   llvm-lib, llvm-rc y llvm-mt. La compilacion inicial uso LLVM 21.1.8.
+3. Descarga xwin desde https://github.com/Jake-Shadle/xwin/releases
+   La compilacion inicial uso xwin 0.10.0. Revisa la licencia de Microsoft y,
+   si la aceptas, prepara el SDK/CRT:
+     xwin --accept-license --cache-dir build-windows-tools/xwin-cache splat \
+       --output build-windows-tools/sdk
+4. Exporta ISS64_LLVM_BIN a la carpeta bin de LLVM e ISS64_WINSDK a la carpeta
+   de salida de xwin (contiene crt/ y sdk/). Por defecto se utilizan las
+   herramientas locales descargadas en build-windows-tools/.
+5. Prepara las DLL oficiales de Visual C++ que necesita DXC incluso con /MT:
+   descarga https://aka.ms/vs/17/release/vc_redist.x64.exe a build-windows-tools/,
+   revisa sus terminos y ejecuta (requiere cabextract):
+     python3 tools/prepare_windows_redist.py build-windows-tools/vc_redist.x64.exe
+   No se instala nada en el sistema; se extraen tres DLL x64 y su licencia.
+6. Ejecuta: ./tools/build_windows.sh
+   Puedes limitar la concurrencia: JOBS=2 ./tools/build_windows.sh
+
+Se usan los generados actuales de n64recomp/generated. Para cambiar la ROM
+o regenerar codigo, consulta n64recomp/README.md; este script no desensambla
+ni copia una ROM. RT64 utiliza DXC y file_to_c nativos de Linux al generar
+shaders; los binarios finales son Windows PE x64 con CRT estatico.
+La pequena adaptacion de RT64 esta en patches/rt64-cross-windows.patch.
+
+DESDE WINDOWS
+1. Inicializa los submodulos y aplica patches/ con tools/setup_dependencies.sh
+   en Git Bash (solo una vez).
+2. Instala las herramientas C++ x64 de Visual Studio con Windows SDK,
+   clang-cl, Ninja, CMake y Python. Usa clang-cl, no cl.exe.
+3. Desde una Developer PowerShell x64 de Visual Studio, ejecuta:
+     powershell -ExecutionPolicy Bypass -File tools/build_windows.ps1
+   Esta ruta nativa se ofrece para recompilar; la compilacion inicial fue
+   cruzada desde Linux.
+
+EMPAQUETAR OTRA VEZ
+  python3 tools/package_windows.py --build-dir build-windows
+El script valida que el EXE y sus DLL sean PE x64, copia las licencias y genera
+un ZIP con SHA-256. No agrega ROMs, partidas, configuracion local ni herramientas
+de desarrollo, aunque esten presentes en una carpeta de salida anterior.
+Para compartir publicamente binarios, conserva y proporciona tambien el codigo
+fuente correspondiente y las modificaciones conforme a las licencias aplicables.
+
+VALIDACION DE ESTA VERSION
+- Ejecutable y seis DLL comprobados como PE x64; ZIP sin ROM ni partidas.
+- Seis pruebas Python de empaquetado/mapeo SDK y pruebas CPU/RSP en Linux.
+- Pruebas CPU/RSP compiladas para Windows y ejecutadas con Wine.
+- Arranque del juego probado con Wine 10: deteccion de GPU y procesamiento
+  continuo de audio RSP. Se corrigio un acceso incorrecto a RDRAM al iniciar audio.
+- Pendiente: probar en una computadora con Windows real y completar un partido.
+  Wine no sustituye esa validacion de controladores, mandos y comportamiento.
+
+DIAGNOSTICO DE PANTALLA NEGRA EN WINDOWS 10
+- windows_diagnostics.cpp registra version de Windows, CPU, memoria, adaptadores
+  DXGI, drivers y etapas de arranque. crash.txt captura codigo/modulo/offset de
+  excepciones no controladas. No recoge volcados completos ni sube informacion.
+- Los BAT Probar_* solicitan auto/Vulkan/D3D12 o desactivan audio, con ajustes
+  conservadores sin sobrescribir settings.cfg. Los workarounds de RT64 para
+  drivers pueden cambiar la API solicitada: el log registra la API final.
+- N64ModernRuntime-windows-memory.patch reserva 4 GiB de direcciones pero solo
+  compromete 512 MiB para RDRAM, en lugar de cargar 4 GiB al limite del sistema.
+  Esto no es el consumo total de RAM del proceso.
+- N64ModernRuntime-startup-errors.patch captura errores de inicializacion en
+  el hilo de arranque y termina con codigo 1; main() no puede capturar excepciones
+  lanzadas por ese hilo. El renderer ya muestra el mensaje de error.
+- plume-shader-model-check.patch evita usar el dispositivo despues de Release
+  si falla la consulta de shader model; rechaza adaptadores incompatibles.
+- windows_diagnostics_tests prueba el registro y filtro con una excepcion
+  sintetica, sin provocar una caida real. Se compila solo en Windows.
+- package_windows.py conserva el .map en dist/symbols/<SHA256-del-EXE>.map;
+  BUILD-INFO.txt identifica el mapa correcto sin incluirlo en el ZIP portable.
+- La causa concreta en las laptops Intel requiere sus logs/modelos. No se ha
+  validado esta compilacion en esas maquinas ni se promete compatibilidad con
+  GPUs sin las funciones D3D12/Vulkan requeridas por RT64.
+- Una prueba Vulkan bajo Wine reprodujo un acceso invalido en func_8008C860:
+  osSpTaskYield (0x80084BA0) no estaba identificado y escribia SP_STATUS como
+  memoria host (rdram + 0x24040010). Se agrego su nombre canonico al generador
+  de simbolos y se regenero N64Recomp para usar osSpTaskYield_recomp. El runtime
+  ya implementa el comportamiento de yield compatible con sus tareas HLE.
+  tests/test_sdk_mappings.py verifica que esa ruta no vuelva al MMIO original.
+- Tras corregir yield, el EXE empaquetado se mantuvo activo durante 60 segundos
+  bajo Wine/Vulkan en una NVIDIA RTX 3050: 6600 listas graficas, mas de 3300
+  tareas de audio y crash.txt vacio. La prueba se termino deliberadamente;
+  no valida partidas completas ni hardware Intel. No confundir el adaptador
+  Intel emulado que enumera DXGI de Wine con la GPU Vulkan real del host.
+- Validacion adicional: 6 pruebas Python, 2 CTest Linux y 3 ejecutables de
+  prueba Windows bajo Wine pasaron. Al deshabilitar vulkan-1 deliberadamente,
+  el paquete registra "Failed to initialize the renderer", sale con codigo 1
+  y no genera una excepcion no controlada (crash.txt vacio).

@@ -37,6 +37,9 @@ KNOWN_NAMES = {
     0x80084160: "osCreateViManager",
     0x80084530: "osSetEventMesg",
     0x80084610: "osSetIntMask",
+    # Writes SP_SET_YIELD (0x400) through __osSpSetStatus. The SDK variant
+    # misses the signature matcher; route it to librecomp, never host MMIO.
+    0x80084BA0: "osSpTaskYield",
     0x800878F0: "osContInit",
     0x80084BC0: "osGetCount",
     # Controller Pak API used by ISS64 for all persistent game data.

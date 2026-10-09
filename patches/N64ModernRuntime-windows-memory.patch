@@ -1,0 +1,30 @@
+--- a/librecomp/src/recomp.cpp
++++ b/librecomp/src/recomp.cpp
+@@ -942,16 +942,22 @@
+     uint8_t* rdram;
+     bool alloc_failed;
+ #ifdef _WIN32
+-    rdram = reinterpret_cast<uint8_t*>(VirtualAlloc(nullptr, allocation_size, MEM_COMMIT | MEM_RESERVE, PAGE_NOACCESS));
+-    DWORD old_protect = 0;
++    // Reserve the 4 GiB address guard, but charge only the usable 512 MiB to
++    // the system commit limit. Committing PAGE_NOACCESS pages still costs
++    // commit, and made startup fail on low-memory/pagefile-limited laptops.
++    rdram = reinterpret_cast<uint8_t*>(VirtualAlloc(nullptr, allocation_size, MEM_RESERVE, PAGE_NOACCESS));
+     alloc_failed = (rdram == nullptr);
+     if (!alloc_failed) {
+-        // VirtualProtect returns 0 on failure.
+-        alloc_failed = (VirtualProtect(rdram, mem_size, PAGE_READWRITE, &old_protect) == 0);
++        alloc_failed = (VirtualAlloc(rdram, mem_size, MEM_COMMIT, PAGE_READWRITE) == nullptr);
+         if (alloc_failed) {
++            fprintf(stderr, "[memory] RDRAM commit failed: Windows error %lu\n", GetLastError());
+             VirtualFree(rdram, 0, MEM_RELEASE);
+         }
+-    }
++    } else {
++        fprintf(stderr, "[memory] RDRAM reservation failed: Windows error %lu\n", GetLastError());
++    }
++    if (!alloc_failed) fprintf(stderr, "[memory] Reserved %zu MiB, committed %zu MiB for RDRAM\n",
++        allocation_size >> 20, mem_size >> 20);
+ #else
+     rdram = (uint8_t*)mmap(NULL, allocation_size, PROT_NONE, MAP_ANON | MAP_PRIVATE, -1, 0);
+     alloc_failed = rdram == reinterpret_cast<uint8_t*>(MAP_FAILED);

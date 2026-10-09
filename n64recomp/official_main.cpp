@@ -11,8 +11,12 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <exception>
 
 #include <SDL.h>
+#ifdef _WIN32
+#include <SDL_syswm.h>
+#endif
 
 #include "generated/funcs.h"
 #include "librecomp/game.hpp"
@@ -22,6 +26,8 @@
 #include "ultramodern/input.hpp"
 #include "ultramodern/ultramodern.hpp"
 #include "rt64_context.hpp"
+#include "rsp_memory.hpp"
+#include "windows_diagnostics.hpp"
 
 void iss64_register_overlays();
 gpr get_entrypoint_address();
@@ -72,6 +78,7 @@ constexpr std::array<std::array<int, 2>, 4> kResolutions{{
 }};
 
 void save_frontend_settings() {
+    if (std::getenv("ISS64_COMPATIBILITY") != nullptr) return;
     std::filesystem::create_directories(".iss64");
     std::ofstream out(".iss64/settings.cfg", std::ios::trunc);
     out << "resolution=" << frontend_settings.resolution_index << '\n'
@@ -185,6 +192,7 @@ bool rebuild_audio_converter() {
 }
 
 void set_audio_frequency(uint32_t frequency) {
+    if (std::getenv("ISS64_DISABLE_HOST_AUDIO") != nullptr) return;
     if (frequency == 0) return;
 
     std::lock_guard lock(audio_mutex);
@@ -559,20 +567,36 @@ void set_rumble(int port, bool enabled) {
 }
 
 ultramodern::renderer::WindowHandle create_window(ultramodern::gfx_callbacks_t::gfx_data_t) {
+    std::fprintf(stderr, "[startup] SDL initialization\n");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER) != 0) {
         std::fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
         std::exit(EXIT_FAILURE);
     }
     const auto& initial_size = kResolutions[frontend_settings.resolution_index];
+    Uint32 window_flags = SDL_WINDOW_RESIZABLE;
+#ifndef _WIN32
+    window_flags |= SDL_WINDOW_VULKAN;
+#endif
     window = SDL_CreateWindow("International Superstar Soccer 64 Recompiled — F5: Settings",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, initial_size[0], initial_size[1],
-        SDL_WINDOW_RESIZABLE | SDL_WINDOW_VULKAN);
+        window_flags);
     if (!window) {
         std::fprintf(stderr, "SDL_CreateWindow failed: %s\n", SDL_GetError());
         std::exit(EXIT_FAILURE);
     }
     open_first_controller();
+    std::fprintf(stderr, "[startup] Window created; SDL video driver: %s\n", SDL_GetCurrentVideoDriver());
+#ifdef _WIN32
+    SDL_SysWMinfo info{};
+    SDL_VERSION(&info.version);
+    if (!SDL_GetWindowWMInfo(window, &info)) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Ronaldinho Soccer 64", SDL_GetError(), window);
+        std::exit(EXIT_FAILURE);
+    }
+    return {info.info.win.window, GetCurrentThreadId()};
+#else
     return window;
+#endif
 }
 
 void update_gfx(void*) {
@@ -651,7 +675,13 @@ void update_gfx(void*) {
     }
 }
 
-void show_error(const char* message) { std::fprintf(stderr, "%s\n", message); }
+void show_error(const char* message) {
+    std::fprintf(stderr, "%s\n", message);
+#ifdef _WIN32
+    if (std::getenv("ISS64_NO_ERROR_DIALOG") == nullptr)
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Ronaldinho Soccer 64", message, window);
+#endif
+}
 
 RspExitReason audio_ucode_placeholder(uint8_t* rdram, uint32_t ucode_addr) {
     // Keeps scheduler progress deterministic until the title's ABI audio ucode
@@ -665,7 +695,7 @@ RspExitReason audio_ucode_placeholder(uint8_t* rdram, uint32_t ucode_addr) {
         char name[80];
         std::snprintf(name, sizeof(name), ".iss64/rsp_ucode_%08X.bin", ucode_addr);
         std::vector<uint8_t> code(size);
-        for (uint32_t i = 0; i < size; ++i) code[i] = MEM_BU(i, ucode_addr);
+        for (uint32_t i = 0; i < size; ++i) code[i] = iss64_rsp_read_byte(rdram, ucode_addr, i);
         std::ofstream(name, std::ios::binary).write(
             reinterpret_cast<const char*>(code.data()), code.size());
         std::ofstream(".iss64/rsp_ucode_data.bin", std::ios::binary).write(
@@ -695,12 +725,42 @@ RspUcodeFunc* select_rsp_ucode(const OSTask* task) {
 }
 }
 
-int main(int argc, char** argv) {
+int run_game(int argc, char** argv) {
+    // Resolve explicit relative paths before setting the portable data directory.
+    std::filesystem::path requested_rom;
+    if (argc >= 3 && std::string_view(argv[1]) == "--rom")
+        requested_rom = std::filesystem::absolute(std::filesystem::u8path(argv[2]));
+    else if (argc == 2)
+        requested_rom = std::filesystem::absolute(std::filesystem::u8path(argv[1]));
+#ifdef _WIN32
+    // Shortcuts and drag-and-drop must not put saves in an arbitrary CWD.
+    if (char* base = SDL_GetBasePath()) {
+        std::error_code error;
+        std::filesystem::current_path(std::filesystem::u8path(base), error);
+        SDL_free(base);
+        if (error) {
+            show_error("No se pudo abrir la carpeta del juego. Extrae el ZIP en una carpeta con permisos de escritura.");
+            return EXIT_FAILURE;
+        }
+    }
+#endif
+    iss64_start_windows_diagnostics();
     constexpr auto game_id = u8"iss64.pirate.br";
     const std::filesystem::path config_path = ".iss64";
     const std::filesystem::path default_rom = "Ronaldinho's Soccer 64 (Brazil) (Pirate).z64";
-    std::filesystem::create_directories(config_path);
+    std::error_code config_error;
+    std::filesystem::create_directories(config_path, config_error);
+    if (config_error) {
+        show_error("No se pudo crear .iss64. Extrae el juego en una carpeta con permisos de escritura.");
+        return EXIT_FAILURE;
+    }
     load_frontend_settings();
+    if (std::getenv("ISS64_COMPATIBILITY") != nullptr) {
+        frontend_settings.resolution_index = 0;
+        frontend_settings.widescreen = false;
+        frontend_settings.fps = 60;
+        std::fprintf(stderr, "[startup] Compatibility: original resolution, 4:3, 60 Hz; saved settings unchanged\n");
+    }
 
     recomp::register_config_path(config_path);
     recomp::register_game({
@@ -719,12 +779,16 @@ int main(int argc, char** argv) {
     iss64_register_overlays();
 
     std::filesystem::path rom = default_rom;
-    if (argc >= 3 && std::string_view(argv[1]) == "--rom") rom = argv[2];
+    if (!requested_rom.empty()) rom = requested_rom;
+    else if (!std::filesystem::exists(rom) && std::filesystem::exists("game.z64")) rom = "game.z64";
+    std::fprintf(stderr, "[startup] Validating ROM\n");
     if (recomp::select_rom(rom, game_id) != recomp::RomValidationError::Good) {
-        std::fprintf(stderr, "ROM inválida o no encontrada: %s\n", rom.string().c_str());
+        show_error("ROM invalida o no encontrada. Coloca tu ROM de Ronaldinho Soccer 64 junto al ejecutable "
+                   "con el nombre game.z64, o arrastra la ROM sobre el ejecutable.");
         return EXIT_FAILURE;
     }
     recomp::start_game(game_id, {});
+    std::fprintf(stderr, "[startup] ROM accepted\n");
     apply_frontend_graphics();
 
     recomp::Configuration config{
@@ -747,11 +811,29 @@ int main(int argc, char** argv) {
         .gfx_callbacks = {.create_gfx = nullptr, .create_window = create_window, .update_gfx = update_gfx},
         .error_handling_callbacks = {.message_box = show_error},
     };
+    std::fprintf(stderr, "[startup] Starting runtime\n");
     recomp::start(config);
+    std::fprintf(stderr, "[shutdown] Runtime returned normally\n");
     if (audio_device != 0) SDL_CloseAudioDevice(audio_device);
     if (controller) SDL_GameControllerClose(controller);
     if (joystick) SDL_JoystickClose(joystick);
     if (window) SDL_DestroyWindow(window);
     SDL_Quit();
     return EXIT_SUCCESS;
+}
+
+int main(int argc, char** argv) {
+    try {
+        return run_game(argc, argv);
+    } catch (const std::exception& error) {
+        std::fprintf(stderr, "[fatal] Startup/runtime exception: %s\n", error.what());
+        show_error("No se pudo iniciar el juego. Revisa diagnostico.log junto al EXE. "
+                   "Prueba Probar_Vulkan.bat. La GPU debe ser compatible con RT64.");
+        // Runtime initialization may have started worker threads before failing.
+        // Avoid destroying still-joinable global threads on this fatal path.
+#ifdef _WIN32
+        ExitProcess(EXIT_FAILURE);
+#endif
+        return EXIT_FAILURE;
+    }
 }

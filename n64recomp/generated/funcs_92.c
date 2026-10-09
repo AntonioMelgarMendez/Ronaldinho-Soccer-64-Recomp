@@ -1,36 +1,6 @@
 #include "iss64_recomp.h"
 #include "funcs.h"
 
-RECOMP_FUNC void func_803F9580(uint8_t* rdram, recomp_context* ctx) {
-    uint64_t hi = 0, lo = 0, result = 0;
-    int c1cs = 0;
-    // 0x803F9580: addiu       $sp, $sp, -0x18
-    ctx->r29 = ADD32(ctx->r29, -0X18);
-    // 0x803F9584: sw          $ra, 0x14($sp)
-    MEM_W(0X14, ctx->r29) = ctx->r31;
-    // 0x803F9588: lui         $a0, 0x8040
-    ctx->r4 = S32(0X8040 << 16);
-    // 0x803F958C: addiu       $a0, $a0, -0x6A58
-    ctx->r4 = ADD32(ctx->r4, -0X6A58);
-    // 0x803F9590: jal         0x800293DC
-    // 0x803F9594: addiu       $a1, $zero, 0x4
-    ctx->r5 = ADD32(0, 0X4);
-    func_800293DC(rdram, ctx);
-        goto after_0;
-    // 0x803F9594: addiu       $a1, $zero, 0x4
-    ctx->r5 = ADD32(0, 0X4);
-    after_0:
-    // 0x803F9598: lw          $ra, 0x14($sp)
-    ctx->r31 = MEM_W(ctx->r29, 0X14);
-    // 0x803F959C: addiu       $sp, $sp, 0x18
-    ctx->r29 = ADD32(ctx->r29, 0X18);
-    // 0x803F95A0: jr          $ra
-    // 0x803F95A4: nop
-
-    return;
-    // 0x803F95A4: nop
-
-;}
 RECOMP_FUNC void func_803F95A8(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     int c1cs = 0;

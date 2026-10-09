@@ -4,6 +4,7 @@
 #include <cstring>
 
 #include "librecomp/rsp.hpp"
+#include "rsp_memory.hpp"
 
 extern "C" {
 #include "hle.h"
@@ -104,7 +105,7 @@ RspExitReason iss64_audio_hle(uint8_t* rdram, uint32_t ucode_addr) {
     // IMEM is only relevant to non-OSTask detection, but keeping a copy makes
     // diagnostics and unusual microcodes behave like the actual RSP.
     for (uint32_t i = 0; i < sizeof(runtime.imem); ++i) {
-        runtime.imem[i ^ 3] = MEM_BU(i, ucode_addr);
+        runtime.imem[i ^ 3] = iss64_rsp_read_byte(rdram, ucode_addr, i);
     }
     runtime.sp_status = 0;
     runtime.sp_pc = 0x1000;

@@ -2448,7 +2448,7 @@ functions = [
     { name = "osSpTaskLoad", vram = 0x8008491C, size = 0x190 },
     { name = "osSpTaskStartGo", vram = 0x80084AAC, size = 0x44 },
     { name = "osDpSetNextBuffer", vram = 0x80084AF0, size = 0xB0 },
-    { name = "func_80084BA0", vram = 0x80084BA0, size = 0x20 },
+    { name = "osSpTaskYield", vram = 0x80084BA0, size = 0x20 },
     { name = "osGetCount", vram = 0x80084BC0, size = 0x10 },
     { name = "osContStartQuery", vram = 0x80084BD0, size = 0x84 },
     { name = "osContGetQuery", vram = 0x80084C54, size = 0x2C },

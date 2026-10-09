@@ -1,0 +1,74 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 79dfc38..596bfa5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -65,6 +65,11 @@ else()
+     endif()
+ endif()
+ 
++if (RT64_HOST_DXC)
++    # Cross builds run the host DXC, which can emit both DXIL and SPIR-V.
++    set(DXC "${RT64_HOST_DXC}")
++endif()
++
+ set(ZSTD_LEGACY_SUPPORT OFF)
+ set(ZSTD_BUILD_STATIC ON)
+ set(ZSTD_BUILD_SHARED OFF)
+@@ -470,7 +475,7 @@ if (WIN32)
+         delayimp.lib
+         D3D12
+         DXGI
+-        Shcore.lib
++        shcore.lib
+         ${PROJECT_SOURCE_DIR}/src/contrib/dxc/lib/x64/dxcompiler.lib)
+ 
+     target_include_directories(rt64 PRIVATE ${zstd_SOURCE_DIR}/lib)
+@@ -556,4 +561,3 @@ build_pixel_shader(  rt64 "src/shaders/Im3DPS.hlsl")
+ build_pixel_shader(  rt64 "src/shaders/PostProcessPS.hlsl")
+ 
+ target_include_directories(rt64 PRIVATE ${CMAKE_BINARY_DIR}/src)
+-
+diff --git a/src/common/rt64_user_paths.cpp b/src/common/rt64_user_paths.cpp
+index f38d8eb..6b4dd97 100644
+--- a/src/common/rt64_user_paths.cpp
++++ b/src/common/rt64_user_paths.cpp
+@@ -8,7 +8,7 @@
+ #   include <unistd.h>
+ #   include <pwd.h>
+ #elif defined(_WIN32)
+-#   include <Shlobj.h>
++#   include <shlobj.h>
+ #elif defined(__APPLE__)
+ #   include "apple/rt64_apple.h"
+ #endif
+diff --git a/src/hle/rt64_application_window.cpp b/src/hle/rt64_application_window.cpp
+index 08f83e5..4e6570f 100755
+--- a/src/hle/rt64_application_window.cpp
++++ b/src/hle/rt64_application_window.cpp
+@@ -10,7 +10,7 @@
+ 
+ #if defined(_WIN32)
+ #   include <Windows.h>
+-#   include <ShellScalingAPI.h>
++#   include <shellscalingapi.h>
+ #elif defined(__linux__)
+ #   define Status int
+ #   if !defined(RT64_SDL_WINDOW_VULKAN)
+diff --git a/src/tools/file_to_c/CMakeLists.txt b/src/tools/file_to_c/CMakeLists.txt
+index 22ee3eb..4b3a7c4 100644
+--- a/src/tools/file_to_c/CMakeLists.txt
++++ b/src/tools/file_to_c/CMakeLists.txt
+@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.20)
+ project(file_to_c)
+ set(CMAKE_CXX_STANDARD 17)
+ 
+-add_executable(file_to_c "file_to_c.cpp")
++if(RT64_HOST_FILE_TO_C)
++    add_executable(file_to_c IMPORTED GLOBAL)
++    set_target_properties(file_to_c PROPERTIES IMPORTED_LOCATION "${RT64_HOST_FILE_TO_C}")
++else()
++    add_executable(file_to_c "file_to_c.cpp")
++endif()
+ 
+ if (APPLE)
+     set_target_properties(file_to_c PROPERTIES

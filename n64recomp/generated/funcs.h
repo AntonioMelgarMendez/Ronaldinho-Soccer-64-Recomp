@@ -2445,7 +2445,7 @@ void func_80084800(uint8_t* rdram, recomp_context* ctx);
 void osSpTaskLoad_recomp(uint8_t* rdram, recomp_context* ctx);
 void osSpTaskStartGo_recomp(uint8_t* rdram, recomp_context* ctx);
 void osDpSetNextBuffer_recomp(uint8_t* rdram, recomp_context* ctx);
-void func_80084BA0(uint8_t* rdram, recomp_context* ctx);
+void osSpTaskYield_recomp(uint8_t* rdram, recomp_context* ctx);
 void osGetCount_recomp(uint8_t* rdram, recomp_context* ctx);
 void osContStartQuery_recomp(uint8_t* rdram, recomp_context* ctx);
 void osContGetQuery_recomp(uint8_t* rdram, recomp_context* ctx);

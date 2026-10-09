@@ -1,0 +1,21 @@
+--- a/librecomp/src/recomp.cpp
++++ b/librecomp/src/recomp.cpp
+@@ -978,7 +978,17 @@
+ 
+         ultramodern::set_native_thread_name("Game Start Thread");
+ 
+-        ultramodern::preinit(rdram, window_handle);
++        try {
++            ultramodern::preinit(rdram, window_handle);
++        } catch (const std::exception& error) {
++            // init_events already reports renderer failures through message_box.
++            // This is a worker thread: the frontend main() cannot catch it.
++            fprintf(stderr, "[fatal] Runtime initialization failed: %s\n", error.what());
++            fflush(stderr);
++            // Timers/VI/cleanup workers may not exist yet. Normal global thread
++            // destruction or join_event_threads would be unsafe in this state.
++            std::_Exit(EXIT_FAILURE);
++        }
+ 
+         recomp_context context{};
+ 

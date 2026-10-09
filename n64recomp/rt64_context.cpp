@@ -1,8 +1,18 @@
 #include "rt64_context.hpp"
 
 #include <algorithm>
+#include <cstdlib>
+#include <cstdio>
+#include <string_view>
 
+#ifdef _WIN32
+// ultramodern uses WIN32_LEAN_AND_MEAN; DXC still needs the COM interfaces.
+#include <objbase.h>
+#endif
+
+#ifndef HLSL_CPU
 #define HLSL_CPU
+#endif
 #include "hle/rt64_application.h"
 #include "ultramodern/config.hpp"
 
@@ -30,6 +40,8 @@ ultramodern::renderer::SetupResult map_result(RT64::Application::SetupResult val
 }
 
 Iss64RT64Context::Iss64RT64Context(uint8_t* rdram, ultramodern::renderer::WindowHandle window, bool developer_mode) {
+    chosen_api = ultramodern::renderer::GraphicsApi::Auto;
+    setup_result = ultramodern::renderer::SetupResult::GraphicsDeviceNotFound;
     RT64::Application::Core core{};
 #if defined(_WIN32)
     core.window = window.window;
@@ -73,7 +85,38 @@ Iss64RT64Context::Iss64RT64Context(uint8_t* rdram, ultramodern::renderer::Window
     config.useConfigurationFile = false;
     app = std::make_unique<RT64::Application>(core, config);
     app->userConfig.developerMode = developer_mode;
+    using API = RT64::UserConfiguration::GraphicsAPI;
+    const char* requested_api = std::getenv("ISS64_GRAPHICS_API");
+    if (requested_api) {
+        const std::string_view api(requested_api);
+        if (api == "vulkan") app->userConfig.graphicsAPI = API::Vulkan;
+        else if (api == "d3d12") app->userConfig.graphicsAPI = API::D3D12;
+        else if (api != "auto") std::fprintf(stderr, "[graphics] Unknown API setting; using automatic\n");
+    }
+    if (std::getenv("ISS64_COMPATIBILITY") != nullptr) {
+        using U = RT64::UserConfiguration;
+        app->userConfig.resolution = U::Resolution::Original;
+        app->userConfig.aspectRatio = U::AspectRatio::Original;
+        app->userConfig.internalColorFormat = U::InternalColorFormat::Standard;
+        app->userConfig.antialiasing = U::Antialiasing::None;
+        app->userConfig.hardwareResolve = U::HardwareResolve::Disabled;
+        app->userConfig.displayBuffering = U::DisplayBuffering::Double;
+    }
+    app->chosenGraphicsAPI = app->userConfig.graphicsAPI;
+    std::fprintf(stderr, "[graphics] RT64 setup begin; requested API=%s\n", requested_api ? requested_api : "auto");
+#ifdef _WIN32
+    setup_result = map_result(app->setup(window.thread_id));
+#else
     setup_result = map_result(app->setup(0));
+#endif
+    switch (app->chosenGraphicsAPI) {
+        case API::D3D12: chosen_api = ultramodern::renderer::GraphicsApi::D3D12; break;
+        case API::Vulkan: chosen_api = ultramodern::renderer::GraphicsApi::Vulkan; break;
+        case API::Metal: chosen_api = ultramodern::renderer::GraphicsApi::Metal; break;
+        default: break;
+    }
+    std::fprintf(stderr, "[graphics] RT64 setup result=%d; chosen API=%d (D3D12=0, Vulkan=1)\n",
+        static_cast<int>(setup_result), static_cast<int>(app->chosenGraphicsAPI));
     if (setup_result != ultramodern::renderer::SetupResult::Success) {
         app.reset();
     } else {
@@ -133,6 +176,9 @@ bool Iss64RT64Context::update_config(
 }
 void Iss64RT64Context::enable_instant_present() {}
 void Iss64RT64Context::send_dl(const OSTask* task) {
+    static uint64_t tasks = 0;
+    if (++tasks == 1 || (std::getenv("ISS64_TRACE_GRAPHICS") && tasks % 600 == 0))
+        std::fprintf(stderr, "[graphics] Display list #%llu\n", static_cast<unsigned long long>(tasks));
     app->state->rsp->reset();
     app->interpreter->loadUCodeGBI(task->t.ucode & 0x3FFFFFF, task->t.ucode_data & 0x3FFFFFF, true);
     app->processDisplayLists(app->core.RDRAM, task->t.data_ptr & 0x3FFFFFF, 0, true);

@@ -17,6 +17,18 @@ RT64** stack; the original core remains a diagnostic profiler only.
 The original ROM is deliberately **not included**. Place your legally obtained
 `.z64` dump beside the executable or pass it with `--rom`.
 
+## Windows portable (x64)
+
+The Windows build produces `dist/RonaldinhoSoccer64-Windows-x64.zip`.
+Extract the whole ZIP, place your ROM next to `RonaldinhoSoccer64.exe` as
+`game.z64`, and double-click the executable. Keep the included DLLs beside it.
+Settings and saves stay in `.iss64` beside the executable. No development tools
+are needed on the destination computer; the ROM is not included.
+
+See [Windows usage](docs/windows-portable.txt) and
+[Windows build instructions](docs/windows-build.txt) for requirements and
+reproducible Linux cross-build / native Windows build commands.
+
 ## Clone and dependencies
 
 Clone recursively, then apply the small compatibility patches required by this

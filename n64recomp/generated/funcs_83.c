@@ -1,87 +1,6 @@
 #include "iss64_recomp.h"
 #include "funcs.h"
 
-RECOMP_FUNC void func_802ACFD0(uint8_t* rdram, recomp_context* ctx) {
-    uint64_t hi = 0, lo = 0, result = 0;
-    int c1cs = 0;
-    // 0x802ACFD0: addiu       $sp, $sp, -0x18
-    ctx->r29 = ADD32(ctx->r29, -0X18);
-    // 0x802ACFD4: sw          $ra, 0x14($sp)
-    MEM_W(0X14, ctx->r29) = ctx->r31;
-    // 0x802ACFD8: lui         $a0, 0x802C
-    ctx->r4 = S32(0X802C << 16);
-    // 0x802ACFDC: jal         0x802ACC38
-    // 0x802ACFE0: addiu       $a0, $a0, 0x510C
-    ctx->r4 = ADD32(ctx->r4, 0X510C);
-    func_802ACC38(rdram, ctx);
-        goto after_0;
-    // 0x802ACFE0: addiu       $a0, $a0, 0x510C
-    ctx->r4 = ADD32(ctx->r4, 0X510C);
-    after_0:
-    // 0x802ACFE4: lui         $v1, 0x802C
-    ctx->r3 = S32(0X802C << 16);
-    // 0x802ACFE8: addiu       $v1, $v1, 0x50E0
-    ctx->r3 = ADD32(ctx->r3, 0X50E0);
-    // 0x802ACFEC: mtc1        $zero, $f0
-    ctx->f0.u32l = 0;
-    // 0x802ACFF0: lwc1        $f4, 0x4C($v1)
-    ctx->f4.u32l = MEM_W(ctx->r3, 0X4C);
-    // 0x802ACFF4: lui         $a0, 0x802C
-    ctx->r4 = S32(0X802C << 16);
-    // 0x802ACFF8: c.eq.s      $f0, $f4
-    CHECK_FR(ctx, 0);
-    CHECK_FR(ctx, 4);
-    c1cs = ctx->f0.fl == ctx->f4.fl;
-    // 0x802ACFFC: lui         $v0, 0x802C
-    ctx->r2 = S32(0X802C << 16);
-    // 0x802AD000: bc1t        L_802AD00C
-    if (c1cs) {
-        // 0x802AD004: nop
-    
-            goto L_802AD00C;
-    }
-    // 0x802AD004: nop
-
-    // 0x802AD008: swc1        $f0, 0x4C($v1)
-    MEM_W(0X4C, ctx->r3) = ctx->f0.u32l;
-L_802AD00C:
-    // 0x802AD00C: lw          $v0, 0x50C0($v0)
-    ctx->r2 = MEM_W(ctx->r2, 0X50C0);
-    // 0x802AD010: addiu       $a0, $a0, 0x4FDC
-    ctx->r4 = ADD32(ctx->r4, 0X4FDC);
-    // 0x802AD014: lwc1        $f6, 0xC($v0)
-    ctx->f6.u32l = MEM_W(ctx->r2, 0XC);
-    // 0x802AD018: lw          $t6, 0x0($a0)
-    ctx->r14 = MEM_W(ctx->r4, 0X0);
-    // 0x802AD01C: swc1        $f6, 0x44($v1)
-    MEM_W(0X44, ctx->r3) = ctx->f6.u32l;
-    // 0x802AD020: lwc1        $f8, 0x10($v0)
-    ctx->f8.u32l = MEM_W(ctx->r2, 0X10);
-    // 0x802AD024: lwc1        $f10, 0x3C($v1)
-    ctx->f10.u32l = MEM_W(ctx->r3, 0X3C);
-    // 0x802AD028: swc1        $f8, 0x48($v1)
-    MEM_W(0X48, ctx->r3) = ctx->f8.u32l;
-    // 0x802AD02C: swc1        $f10, 0xC($t6)
-    MEM_W(0XC, ctx->r14) = ctx->f10.u32l;
-    // 0x802AD030: lw          $t7, 0x0($a0)
-    ctx->r15 = MEM_W(ctx->r4, 0X0);
-    // 0x802AD034: lwc1        $f16, 0x40($v1)
-    ctx->f16.u32l = MEM_W(ctx->r3, 0X40);
-    // 0x802AD038: nop
-
-    // 0x802AD03C: swc1        $f16, 0x10($t7)
-    MEM_W(0X10, ctx->r15) = ctx->f16.u32l;
-    // 0x802AD040: lw          $ra, 0x14($sp)
-    ctx->r31 = MEM_W(ctx->r29, 0X14);
-    // 0x802AD044: addiu       $sp, $sp, 0x18
-    ctx->r29 = ADD32(ctx->r29, 0X18);
-    // 0x802AD048: jr          $ra
-    // 0x802AD04C: nop
-
-    return;
-    // 0x802AD04C: nop
-
-;}
 RECOMP_FUNC void func_802AD050(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     int c1cs = 0;
@@ -20222,4 +20141,24 @@ RECOMP_FUNC void func_802B3B8C(uint8_t* rdram, recomp_context* ctx) {
     return;
     // 0x802B3B9C: sw          $zero, 0x5804($at)
     MEM_W(0X5804, ctx->r1) = 0;
+;}
+RECOMP_FUNC void func_802B3BA0(uint8_t* rdram, recomp_context* ctx) {
+    uint64_t hi = 0, lo = 0, result = 0;
+    int c1cs = 0;
+    // 0x802B3BA0: lui         $v0, 0x802C
+    ctx->r2 = S32(0X802C << 16);
+    // 0x802B3BA4: addiu       $v0, $v0, 0x5800
+    ctx->r2 = ADD32(ctx->r2, 0X5800);
+    // 0x802B3BA8: lw          $t6, 0x0($v0)
+    ctx->r14 = MEM_W(ctx->r2, 0X0);
+    // 0x802B3BAC: nop
+
+    // 0x802B3BB0: addiu       $t7, $t6, 0x1
+    ctx->r15 = ADD32(ctx->r14, 0X1);
+    // 0x802B3BB4: jr          $ra
+    // 0x802B3BB8: sw          $t7, 0x0($v0)
+    MEM_W(0X0, ctx->r2) = ctx->r15;
+    return;
+    // 0x802B3BB8: sw          $t7, 0x0($v0)
+    MEM_W(0X0, ctx->r2) = ctx->r15;
 ;}

@@ -1,0 +1,36 @@
+diff --git a/plume_d3d12.cpp b/plume_d3d12.cpp
+index 2cdcf18..5e1a4cc 100644
+--- a/plume_d3d12.cpp
++++ b/plume_d3d12.cpp
+@@ -3673,19 +3673,24 @@ namespace plume {
+             const D3D_SHADER_MODEL supportedShaderModels[] = { D3D_SHADER_MODEL_6_0 };
+ #       endif
+             D3D12_FEATURE_DATA_SHADER_MODEL dataShaderModel = {};
++            bool supportedShaderModel = false;
+             for (uint32_t i = 0; i < _countof(supportedShaderModels); i++) {
+                 dataShaderModel.HighestShaderModel = supportedShaderModels[i];
+                 res = deviceOption->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &dataShaderModel, sizeof(dataShaderModel));
+-                if (res != E_INVALIDARG) {
+-                    if (FAILED(res)) {
+-                        deviceOption->Release();
+-                        adapterOption->Release();
+-                        continue;
+-                    }
+-
++                if (SUCCEEDED(res) && dataShaderModel.HighestShaderModel >= supportedShaderModels[i]) {
++                    supportedShaderModel = true;
+                     break;
+                 }
+             }
++            if (!supportedShaderModel) {
++                // Reject the adapter, not just the inner shader-model iteration.
++                // The old inner continue used deviceOption after releasing it.
++                fprintf(stderr, "D3D12: adapter %ls has no supported shader model (HRESULT=0x%lX, model=0x%X).\n",
++                    adapterDesc.Description, res, unsigned(dataShaderModel.HighestShaderModel));
++                deviceOption->Release();
++                adapterOption->Release();
++                continue;
++            }
+ 
+             // Determine if the device supports sample locations.
+             bool resolveRegionOption = false;
